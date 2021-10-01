@@ -7,7 +7,7 @@ from Model.csv_parse import get_country_name
 from merge import merge_window
 import Controller.Des.win_closed as wc
 import Controller.Des.send as send
-#import Controller.Des.back_button as back
+import Controller.Des.back_button as back
 import Controller.Des.submit as submit
 import Controller.Des.merge as merge
 import Controller.Des.plot as p 
@@ -59,97 +59,28 @@ def des(columns, win_title, func):
     window = sg.Window(win_title, layout, size=(800, 600), font='Helvetica 12', finalize=True)
     keep_going = True
     figure_agg = None
-
+    
 
     while keep_going == True:
         event, values = window.read()
 
-        keep_going = wc.accept(event, values, window)
-
+        keep_going = wc.accept(event)
         if keep_going == False:
             break
-    
-        keep_going = send.accept( event, values, window)
-        #keep_going = back.accept(event, values, window)
-        keep_going = send.accept(event, values, window)
+        keep_going = send.accept(event, values)
+        keep_going = back.accept(event, window, figure_agg)
         keep_going = submit.accept(event, values, window)
-        keep_going = merge.accept(event, values, window)
-
-
-        # if event == sg.WIN_CLOSED:
-        #     break
-
-        # #if user click send button the input will display on the output screen
-        # if event == 'Send':
-        #     msg = values['-MSG-'].rstrip()
-        #     print(f'{msg}')
-
-        if event == 'Back':
-            if figure_agg:
-                dp.delete_figure_agg(figure_agg)
-            window.close()
-            Menu.menu()
-        # if event == "Submit":
-        #     csv_files = values["-IN-"]
-        #     if window.Title == "Daily new Covid cases":
-        #         try:
-        #             window.find_element("-COMBO1-").update(value="Select country", values= get_country_name(csv_files))
-        #             window.find_element("-COMBO2-").update(value="Select country", values= get_country_name(csv_files))
-
-        #         except Exception as e:
-        #             sg.Popup(e)
-        # if event == "Merge CSV files":
-        #     merge_window()
-
+        keep_going = merge.accept(event)
+ 
         if figure_agg:
-            # ** IMPORTANT ** Clean up previous drawing before drawing again
+                # ** IMPORTANT ** Clean up previous drawing before drawing again
             dp.delete_figure_agg(figure_agg)
 
-        #p.accept(event, values, window, func)
-  
-
-        if event == '-UPDATE-':
-
-            if win_title == "Daily new Covid cases":
-                try:
-                    choiceA = values['-COMBO1-']
-                    choiceB = values['-COMBO2-']
-                    figure_agg = dp.draw_figure(window['-CANVAS-'].TKCanvas, func(choiceA, choiceB, values["-IN-"]), window['-CONTROLS-'].TKCanvas)
-                except UnboundLocalError:
-                    sg.Popup("Please submit a CSV file.")
-                except KeyError:
-                    sg.Popup("Please select a correct CSV file.")
-                except IndexError:
-                    sg.Popup("Please choose countries to plot the chart.")
-                except Exception as e:
-                    sg.Popup(e)
-
-            if win_title == 'Death rates by country':
-                try:
-                    choiceA = values['-COMBO3-']
-                    figure_agg = dp.draw_figure(window['-CANVAS-'].TKCanvas, func(choiceA, values["-IN-"]), window['-CONTROLS-'].TKCanvas)
-                except UnboundLocalError:
-                    sg.Popup("Please submit a CSV file.")
-                except KeyError:
-                    sg.Popup("Please select a correct CSV file.")
-                except IndexError:
-                    sg.Popup("Please choose countries to plot the chart.")
-                except Exception as e:
-                    sg.Popup(e)
+        result = p.accept(event, values, window, func)
             
-            if win_title == 'Fully Vaccinated rates by country':
-                try:
-                    choiceA = values['-COMBO3-']
-                    figure_agg = dp.draw_figure(window['-CANVAS-'].TKCanvas, func(choiceA, values["-IN-"]), window['-CONTROLS-'].TKCanvas)
-                except UnboundLocalError:
-                    sg.Popup("Please submit a CSV file.")
-                except KeyError:
-                    sg.Popup("Please select a correct CSV file.")
-                except IndexError:
-                    sg.Popup("Please choose countries to plot the chart.")
-                except Exception as e:
-                    sg.Popup(e)
-
+        keep_going = result[0]
+        figure_agg = result[1]
+    
     window.close()
 
 

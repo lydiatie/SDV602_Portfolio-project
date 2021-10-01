@@ -1,5 +1,5 @@
 
-def accept( event, values, window):
+def accept( event, values):
     keep_going = True
     if event == 'Send':
         msg = values['-MSG-'].rstrip()

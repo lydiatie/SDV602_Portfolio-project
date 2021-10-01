@@ -4,13 +4,12 @@ import PySimpleGUI as sg
 import View.Draw_plot as dp
 
 
-
 def accept( event, values, window, func):
     keep_going = True
+    figure_agg = None
 
     if event == '-UPDATE-':
 
-        
         if window.Title == "Daily new Covid cases":
 
             try:
@@ -53,6 +52,7 @@ def accept( event, values, window, func):
                 sg.Popup("Please choose countries to plot the chart.")
             except Exception as e:
                 sg.Popup(e)
-    return keep_going
+
+    return keep_going, figure_agg
     
     
