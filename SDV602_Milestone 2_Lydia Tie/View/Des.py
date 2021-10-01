@@ -2,9 +2,6 @@ import sys
 sys.path.append(".")
 import PySimpleGUI as sg
 import Draw_plot as dp
-import Menu
-from Model.csv_parse import get_country_name
-from merge import merge_window
 import Controller.Des.win_closed as wc
 import Controller.Des.send as send
 import Controller.Des.back_button as back
