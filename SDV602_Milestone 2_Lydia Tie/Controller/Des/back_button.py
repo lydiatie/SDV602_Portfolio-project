@@ -3,9 +3,6 @@ sys.path.append(".")
 import View.Draw_plot as dp
 import View.Menu as Menu
 
-
-
-
 def accept( event, window, figure_agg):
 
     keep_going = True

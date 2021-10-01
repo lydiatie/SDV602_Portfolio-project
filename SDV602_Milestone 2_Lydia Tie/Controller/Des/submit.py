@@ -3,7 +3,6 @@ sys.path.append(".")
 import PySimpleGUI as sg
 from Model.csv_parse import get_country_name
 
-
 def accept( event, values, window):
     keep_going = True
     if event == "Submit":

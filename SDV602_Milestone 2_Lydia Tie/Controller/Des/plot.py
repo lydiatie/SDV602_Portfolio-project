@@ -3,7 +3,6 @@ sys.path.append(".")
 import PySimpleGUI as sg
 import View.Draw_plot as dp
 
-
 def accept( event, values, window, func):
     keep_going = True
     figure_agg = None
